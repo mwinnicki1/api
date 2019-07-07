@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('srecipe:server');
+var debug = require('debug')('my-doctor-api:server');
 var http = require('http');
 
 /**

@@ -7,7 +7,9 @@ router.get('/:id', function (req, res, next) {
             id: req.params.id
         }
     }).then(item => {
-        res.json(item);
+        res.json({ item });
+    }).catch(error => {
+        res.json({ error });
     })
 });
 

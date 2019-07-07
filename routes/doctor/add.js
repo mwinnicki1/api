@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const { Doctor } = require("../../models");
-router.get('/:id', function (req, res, next) {
-    Doctor.findOne({
-        where: {
-            id: req.params.id
-        }
+router.post('/', function (req, res, next) {
+    Doctor.create({
+        numberPwz: req.body.numberPwz,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        specialization: req.body.specialization
     }).then(item => {
         res.json({ item });
     }).catch(error => {

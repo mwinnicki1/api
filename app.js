@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const index = require('./routes/home');
-const { Doctor, Visit, Pantient, Schedule } = require('./routes');
+const { Doctor, Visit, Pantient, Schedule, Auth } = require('./routes');
 const { generateDoctor, generatePantient, generateSchedule, generateVisit } = require('./faker');
 
 var app = express();
@@ -26,22 +26,39 @@ app.use('/', index);
 //doctor
 app.use('/doctors', Doctor.getAll);
 app.use('/doctor', Doctor.get);
-app.use('/remove', Doctor.remove);
+app.use('/doctor/remove', Doctor.remove);
+app.use('/doctor/add', Doctor.add);
+app.use('/doctor/edit', Doctor.edit);
+app.use('/alldoctors', Doctor.getAllDoctors);
 
 //visit
 app.use('/visits', Visit.getAll);
 app.use('/visit', Visit.get);
 app.use('/visit/remove', Visit.remove);
+app.use('/visit/search',Visit.search);
+app.use('/visit/day', Visit.getDay);
+app.use('/visit/add', Visit.add);
+app.use('/visit/edit', Visit.edit);
 
 //schedule
 app.use('/schedules', Schedule.getAll);
 app.use('/schedule', Schedule.get);
 app.use('/schedule/remove', Schedule.remove);
+app.use('/schedule/search', Schedule.search);
+app.use('/schedule/add', Schedule.add);
+app.use('/schedule/edit', Schedule.edit);
 
 //pantients
 app.use('/pantients', Pantient.getAll);
 app.use('/pantient', Pantient.get);
 app.use('/pantient/remove', Pantient.remove);
+app.use('/pantient/add', Pantient.add);
+app.use('/pantient/edit', Pantient.edit);
+app.use('/allpantients', Pantient.getAllPantients);
+
+//auth
+app.use('/login', Auth.login);
+app.use('/register', Auth.register);
 
 //faker
 app.use('/generatePantient', generatePantient);

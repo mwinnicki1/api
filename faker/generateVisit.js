@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const { Doctor, Pantient, Schedule, Visit } = require("../models");
+const moment = require("moment");
 const faker = require('faker');
-const { LocalDateTime } = require('js-joda');
 router.get('/', async (req, res, next) => {
     let doctors = [];
     await Doctor.findAll({ include: Schedule }).then(docs => {
         doctors = docs;
     });
+
     Pantient.findAll().then(async (pantients) => {
         pantients.forEach(async (pantient) => {
             for (let i = 0; i < 5; i++) {
@@ -21,12 +22,12 @@ router.get('/', async (req, res, next) => {
                     const hourClose = Number(schedule.hourClose.replace(':00:00', ''));
                     const hourVisit = Number((Math.random() * Number(hourClose - hourOpen - 1) + hourOpen).toFixed());
                     let date = faker.date.future().toISOString();
-                    date = LocalDateTime.parse(date.substring(0, date.length - 2)).withNano(0).withSecond(0).withMinute(0).withHour(hourVisit);
-                    if (date.dayOfWeek().value() != schedule.dayOfWeek) {
-                        date = date.plusDays(schedule.dayOfWeek + 1 - date.dayOfWeek().value())
+                    date = moment(date).set({ 'hour': hourVisit, 'minute': 0, 'second': 0, 'millisecond': 0 });
+                    if (moment(date).day() != schedule.dayOfWeek) {
+                        date = moment(date).add(schedule.dayOfWeek - moment(date).day(), 'days');
                     }
-                    date = date.toString() + 'Z';
-                    // console.log(date.dayOfWeek(), schedule.dayOfWeek);
+                    date = moment(date).toISOString();
+
                     await Visit.findOrCreate({ where: { doctorId: doctorId, pantientId: pantient.id, date } }).then(([visit, create]) => {
                         console.log(visit);
                         created = !create;

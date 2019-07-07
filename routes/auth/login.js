@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const { Schedule } = require("../../models");
-router.delete('/:id', function (req, res, next) {
-    Schedule.destroy({
+const { User } = require("../../models");
+router.post('/', function (req, res, next) {
+    User.findOne({
         where: {
-            id: req.params.id
+            email: req.body.email,
+            password: req.body.password
         }
     }).then(item => {
         res.json({ item });

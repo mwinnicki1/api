@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const { Schedule } = require("../../models");
-router.delete('/:id', function (req, res, next) {
-    Schedule.destroy({
-        where: {
-            id: req.params.id
-        }
+const { User } = require("../../models");
+router.post('/', function (req, res, next) {
+    User.create({
+        email: req.body.email,
+        password: req.body.password
     }).then(item => {
         res.json({ item });
     }).catch(error => {
